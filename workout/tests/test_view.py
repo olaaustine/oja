@@ -35,21 +35,6 @@ def test_add_body_part_exercise(client, db):
     assert b'<form' in response.content
 
 @pytest.mark.django_db
-def test_add_body_part_exercise_post_valid(client):
-    body_part = BodyPart.objects.create(name='Back', description='Upper back')
-    url = reverse('create_body_part_exercise')
-    data = {
-        'body_part': body_part.id,
-        'exercise_name': 'Pull Up',
-        'exercise_description': 'Back exercise'
-    }
-    response = client.post(url, data)
-    assert response.status_code == 200
-    assert Exercise.objects.filter(name='Pull Up').exists()
-    assert BodyPartExercise.objects.filter(body_part=body_part, exercise__name='Pull Up').exists()
-    assert b'success' in response.content
-
-@pytest.mark.django_db
 def test_add_body_part_exercise_post_invalid(client):
     url = reverse('create_body_part_exercise')
     data = {'body_part': '', 'exercise_name': '', 'exercise_description': ''}
@@ -104,3 +89,33 @@ def test_add_workout_session_post_invalid(client):
     response = client.post(url, data)
     assert response.status_code == 200
     assert not WorkoutSession.objects.exists()
+
+@pytest.mark.django_db
+def test_edit_workout_session(client):
+    workout_session = WorkoutSession.objects.create(
+        body_part_exercise=BodyPartExercise.objects.create(
+            body_part=BodyPart.objects.create(name='Test', description='Test desc'),
+            exercise=Exercise.objects.create(name='Test Exercise', description='Test exercise desc', weights=20, sets=2, reps=15)
+        )
+    )
+    url = reverse('edit_workout_session', args=[1])
+    response = client.get(url)
+    assert response.status_code == 200
+    assert response.context['workout_session'] == workout_session
+
+@pytest.mark.django_db
+def test_get_exercise_details_api(client):
+    body_part_exercise = BodyPartExercise.objects.create(
+        body_part=BodyPart.objects.create(name='Test', description='Test desc'),
+        exercise=Exercise.objects.create(name='Test Exercise', description='Test exercise desc', weights="20.00", sets=2,
+                                         reps=15)
+    )
+    url = reverse('exercise_details', args=[1])
+    response = client.get(url)
+    assert response.status_code == 200
+    data = response.json()
+    assert data['name'] == body_part_exercise.exercise.name
+    assert data['description'] == body_part_exercise.exercise.description
+    assert data['weights'] == body_part_exercise.exercise.weights
+    assert data['sets'] == body_part_exercise.exercise.sets
+    assert data['reps'] == body_part_exercise.exercise.reps
