@@ -10,16 +10,16 @@ class WorkoutSessionSerializer(serializers.Serializer):
     exercise_weights = serializers.SerializerMethodField()
     exercise_weights_increase_biweekly = serializers.SerializerMethodField()
 
-    def get_body_parts(self, obj):
+    def get_body_parts(self, obj: WorkoutSession):
         return BodyPartSerializer(obj.body_part_exercise.body_part).data
 
-    def get_exercises(self, obj):
+    def get_exercises(self, obj: WorkoutSession):
         return ExerciseSerializer(obj.body_part_exercise.exercise).data
 
-    def get_exercise_weights(self, obj):
+    def get_exercise_weights(self, obj: WorkoutSession):
         return obj.body_part_exercise.exercise.weights
 
-    def get_exercise_weights_increase_biweekly(self, obj):
+    def get_exercise_weights_increase_biweekly(self, obj: WorkoutSession):
         sessions = WorkoutSession.objects.filter(
             body_part_exercise__exercise=obj.body_part_exercise.exercise
         ).order_by('-date')[:2]
@@ -34,10 +34,10 @@ class WorkoutSessionSerializer(serializers.Serializer):
         else:
             return 0
 
-    def get_exercise_sets(self, obj):
+    def get_exercise_sets(self, obj: WorkoutSession):
         return obj.body_part_exercise.exercise.sets
 
-    def get_exercise_reps(self, obj):
+    def get_exercise_reps(self, obj: WorkoutSession):
         return obj.body_part_exercise.exercise.reps
 
 

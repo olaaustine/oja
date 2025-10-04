@@ -20,7 +20,7 @@ class BodyPartExerciseListTemplateView(ListView):
     template_name = "body_part_exercise_list.html"
     context_object_name = "object_list"
 
-def get_exercise_details(request, id) -> JsonResponse:
+def get_exercise_details(request, id: int) -> JsonResponse:
     bodyparts_exercise = get_object_or_404(BodyPartExercise, id=id)
     exercise = get_object_or_404(Exercise, id=bodyparts_exercise.exercise.id)
 
@@ -58,9 +58,8 @@ def add_body_part_exercise(request) -> HttpResponse:
     if request.method == 'POST':
         form = BodyPartExerciseForm(request.POST)
         if form.is_valid():
-            bodypart_exercise = form.save()
+            form.save()
             # Get summary data for the newly created exercise
-
             return render(request, 'create_body_part_exercise.html', {'form': form, 'success': True})
         else:
             return render(request, 'create_body_part_exercise.html', {'form': form, 'errors': form.errors})

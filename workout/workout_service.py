@@ -21,7 +21,7 @@ def get_exercise_by_id(exercise_id: int) -> ExerciseModel | None:
     except Exercise.DoesNotExist:
         return None
 
-def get_all_workout_sessions_by_id(exercise_id):
+def get_all_workout_sessions_by_id(exercise_id: int):
     try:
         bodypart_exercise = get_object_or_404(BodyPartExercise, id=exercise_id)
         workout_sessions = bodypart_exercise.workoutsession_set.all()
