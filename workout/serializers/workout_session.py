@@ -30,7 +30,7 @@ class WorkoutSessionSerializer(serializers.Serializer):
         if len(weights) >= 2:
             return weights[0] - weights[1]
         elif len(weights) == 1:
-            return weights[0]
+            return 0
         else:
             return 0
 

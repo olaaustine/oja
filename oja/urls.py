@@ -23,7 +23,8 @@ from workout.views import (
     add_body_part_exercise,
     get_exercise_details,
     BodyPartExerciseListTemplateView,
-    edit_workout_session
+    edit_workout_session,
+    WorkoutSessionsCalculations
 )
 
 urlpatterns = [
@@ -46,6 +47,7 @@ urlpatterns = [
 
     path('body-parts-exercises/list/', BodyPartExerciseListTemplateView.as_view(), name='body_parts_exercises_list'),
 
-    path('workout-sessions/<int:pk>/edit/', edit_workout_session, name='edit_workout_session'),
+    path('workout-sessions/<id>/edit/', edit_workout_session, name='edit_workout_session'),
 
+    path('api/workout-sessions-calc/<int:exercise_id>/', WorkoutSessionsCalculations.as_view(), name='workout_sessions_calculations'),
 ]
