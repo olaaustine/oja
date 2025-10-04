@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Create Workout Session • OJA</title>
+    <style>
+        /* 🌸 Background (soft pink gradient) */
+        body {
+            background: linear-gradient(120deg, #f8a5c2 0%, #fcd5ce 100%);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+
+        /* 💎 Card */
+        .form-container {
+            width: 92%;
+            max-width: 520px;
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+            transition: transform 0.25s ease;
+        }
+        .form-container:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 🏷️ Heading */
+        h2 {
+            text-align: center;
+            color: #e84393; /* brand pink */
+            margin: 0 0 1.25rem;
+            font-weight: 800;
+            letter-spacing: .3px;
+        }
+
+        /* 🧾 Labels & fields */
+        form {
+            margin-top: .5rem;
+        }
+        label {
+            display: block;
+            font-size: .95rem;
+            color: #666;
+            margin-top: 1rem;
+            margin-bottom: .35rem;
+            font-weight: 600;
+        }
+        input, select, textarea {
+            font-size: 1rem;
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #e7e7e9;
+            background: #fafafa;
+            box-sizing: border-box;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #e84393;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.12);
+        }
+
+        /* ✅ / ❌ Messages */
+        .success-message {
+            color: #2e7d32;
+            background: #eafaf1;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        .error-list {
+            color: #c0392b;
+            background: #fdecea;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 1rem;
+            list-style: none;
+        }
+        .error-list li { margin: 6px 0; }
+
+        /* 🎯 Button */
+        button {
+            display: inline-block;
+            width: 100%;
+            background: #e84393;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-top: 1.25rem;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(232, 67, 147, 0.25);
+            transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+        }
+        button:hover {
+            background: #d63074;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(232, 67, 147, 0.28);
+        }
+
+        /* 🪪 Small helper text (optional) */
+        .hint {
+            font-size: .85rem;
+            color: #999;
+            margin-top: .35rem;
+        }
+
+        /* 📱 Mobile tweaks */
+        @media (max-width: 480px) {
+            .form-container { padding: 2rem 1.25rem; }
+            h2 { font-size: 1.6rem; }
+            button { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Create Workout Session</h2>
+
+        {% if success %}
+            <div class="success-message">Workout session created successfully!</div>
+        {% endif %}
+
+        {% if errors %}
+            <ul class="error-list">
+                {% for field, error_list in errors.items %}
+                    {% for error in error_list %}
+                        <li>{{ field }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="id_date">Date</label>
+            {{ form.date }}
+
+            <label for="id_body_part_exercise">Body Part &amp; Exercise</label>
+            {{ form.body_part_exercise }}
+            <div class="hint">Choose the paired body part + exercise (e.g., Chest — Bench Press).</div>
+
+            <label for="id_exercise_name">Exercise Name</label>
+            {{ form.exercise_name }}
+
+            <label for="id_exercise_description">Exercise Description</label>
+            {{ form.exercise_description }}
+
+            <label for="id_exercise_weights">Weights</label>
+            {{ form.exercise_weights }}
+
+            <label for="id_exercise_sets">Sets</label>
+            {{ form.exercise_sets }}
+
+            <label for="id_exercise_reps">Reps</label>
+            {{ form.exercise_reps }}
+
+            <button type="submit">Save Session</button>
+        </form>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var bpeSelect = document.getElementById('id_body_part_exercise');
+            if (bpeSelect) {
+                bpeSelect.addEventListener('change', function() {
+                    var bpeId = this.value;
+                    fetch('/api/exercise/' + bpeId + '/')
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('id_exercise_name').value = data.name;
+                            document.getElementById('id_exercise_description').value = data.description;
+                            document.getElementById('id_exercise_weights').value = data.weights;
+                            document.getElementById('id_exercise_sets').value = data.sets;
+                            document.getElementById('id_exercise_reps').value = data.reps;
+                        });
+                });
+            }
+        });
+        </script>
+    </div>
+</body>
+</html>

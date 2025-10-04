@@ -1,0 +1,4 @@
+from workout.serializers.exercise import ExerciseSerializer
+from workout.serializers.bodyparts import BodyPartSerializer
+from workout.serializers.bodypartsexercise import BodyPartsExerciseSerializer
+from workout.serializers.workout_session import WorkoutSessionSerializer

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OJA | Record Your Workout</title>
+    <style>
+        /* 🌸 Background */
+        body {
+            background: linear-gradient(120deg, #f8a5c2 0%, #fcd5ce 100%);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        /* 💎 Card */
+        .card {
+            background: #fff;
+            padding: 3rem 4rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 420px;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 🏋️‍♀️ Title */
+        h1 {
+            font-size: 3rem;
+            color: #e84393; /* Pink accent */
+            margin-bottom: 0.3em;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #636e72;
+            margin-bottom: 2em;
+        }
+
+        /* 🎯 Buttons */
+        .cta-btn {
+            background: #e84393;
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.25s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: block;
+            width: 80%;
+            margin: 0.4em auto;
+            font-weight: 600;
+        }
+
+        .cta-btn:hover {
+            background: #d63074;
+            transform: translateY(-2px);
+        }
+
+        /* 🩷 Secondary button */
+        .cta-btn-secondary {
+            background: #fd79a8;
+        }
+
+        .cta-btn-secondary:hover {
+            background: #e84393;
+        }
+
+        /* Small footer */
+        footer {
+            margin-top: 1.5em;
+            font-size: 0.9rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>OJA</h1>
+        <p>Track your strength, one rep at a time 💪</p>
+
+        <a href="{% url 'create_body_part' %}" class="cta-btn">Add a Body Part</a>
+        <a href="{% url 'create_body_part_exercise' %}" class="cta-btn cta-btn-secondary">Add an Exercise</a>
+        <a href="{% url 'create_workout_session' %}" class="cta-btn" style="margin-top: 1em;">Start a Workout Session</a>
+
+        <footer>Stay consistent. Progress every day.</footer>
+    </div>
+</body>
+</html>
+
