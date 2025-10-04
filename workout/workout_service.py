@@ -1,6 +1,8 @@
+from django.conf import settings
 from pydantic import BaseModel, ConfigDict
-from workout.models import Exercise, BodyPartExercise
 from django.shortcuts import get_object_or_404
+from openai import OpenAI
+from workout.models import Exercise, BodyPartExercise
 from workout.serializers.workout_session import WorkoutSessionSerializer
 
 
@@ -33,4 +35,25 @@ def get_all_workout_sessions_by_id(exercise_id: int):
         return None
 
 
+def get_suggestions_for_exercise(body_part: str):
+    """Get exercise suggestions based on body part"""
+    client = OpenAI(api_key=settings.OPENAI_API_KEY)
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a fitness expert. Provide exercise suggestions based on body parts."
+            },
+            {
+                "role": "user",
+                "content": f"Suggest 3 exercises for the {body_part}."
+            }
+        ],
+        max_tokens=150,
+        n=1,
+    )
+
+    # Extract the model output text
+    return response.choices[0].message.content.strip()
 

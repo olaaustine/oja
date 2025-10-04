@@ -1,12 +1,13 @@
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from workout.models import Exercise, BodyPartExercise
 from workout.forms import BodyPartForm, WorkoutSessionForm, BodyPartExerciseForm
-from workout.workout_service import ExerciseModel, get_all_workout_sessions_by_id
+from workout.workout_service import ExerciseModel, get_all_workout_sessions_by_id, get_suggestions_for_exercise
 from workout.serializers.bodypartsexercise import BodyPartsExerciseSerializer
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -60,13 +61,15 @@ def add_body_part(request) -> HttpResponse:
 
 
 def add_body_part_exercise(request) -> HttpResponse:
-    """ View to add a new BodyPartExercise along with a new Exercise """
+    suggestion = None
     if request.method == 'POST':
         form = BodyPartExerciseForm(request.POST)
         if form.is_valid():
-            form.save()
-            # Get summary data for the newly created exercise
-            return render(request, 'create_body_part_exercise.html', {'form': form, 'success': True})
+            bodypart_exercise = form.save()
+            # Get workout suggestion for the selected body part
+            body_part_name = bodypart_exercise.body_part.name
+            suggestion = get_suggestions_for_exercise(body_part_name)
+            return render(request, 'create_body_part_exercise.html', {'form': form, 'success': True, 'suggestion': suggestion})
         else:
             return render(request, 'create_body_part_exercise.html', {'form': form, 'errors': form.errors})
     else:
@@ -113,3 +116,13 @@ def edit_workout_session(request, id) -> HttpResponse:
         form = WorkoutSessionForm()
         summary_data = get_all_workout_sessions_by_id(bpe.exercise.id)
         return render(request, 'edit_session.html', {'form': form, 'summary_data': summary_data})
+
+def get_suggestions_api_workout(request):
+    if request.method == 'POST':
+        body_part = request.POST.get('body_part', '')
+        if body_part:
+            suggestion = get_suggestions_for_exercise(body_part)
+            return JsonResponse({'suggestion': suggestion})
+        else:
+            return JsonResponse({'error': 'Body part is required'}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

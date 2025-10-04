@@ -153,6 +153,11 @@
             </ul>
         {% endif %}
 
+        <div id="suggestion-box" class="form-container" style="background: #eafaf1; border: 1px solid #2e7d32; margin-bottom: 1.5rem; display: none;">
+            <h3 style="color: #2e7d32; text-align: center; margin-bottom: 1rem;">Workout Suggestion</h3>
+            <p id="suggestion-text" style="text-align: center;"></p>
+        </div>
+
         <form method="post">
             {% csrf_token %}
 
@@ -170,5 +175,37 @@
 
         <a href="{% url 'landing' %}" class="back-link">&larr; Back to Home</a>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var bodyPartSelect = document.getElementById('id_body_part');
+            var suggestionBox = document.getElementById('suggestion-box');
+            var suggestionText = document.getElementById('suggestion-text');
+
+            if (bodyPartSelect) {
+                bodyPartSelect.addEventListener('change', function() {
+                    var bodyPart = bodyPartSelect.options[bodyPartSelect.selectedIndex].text;
+                    fetch("{% url 'suggest_workout_api' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: "body_part=" + encodeURIComponent(bodyPart)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.suggestion) {
+                            suggestionText.textContent = data.suggestion;
+                            suggestionBox.style.display = "block";
+                        } else {
+                            suggestionText.textContent = "";
+                            suggestionBox.style.display = "none";
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>
