@@ -35,6 +35,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&7fz59xlwm%llhz!ta@stx8h91_yr&j8lb2&gkmiu=e%&55wu2'
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {
+        "django.request": {"handlers": ["console"], "level": "ERROR", "propagate": True},
+        "django.server": {"handlers": ["console"], "level": "ERROR", "propagate": True},
+    },
+}
 
 
 # Application definition
