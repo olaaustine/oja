@@ -1,3 +1,7 @@
-I built a simple workout app to track my gym progress.
-While there are plenty of commercial options, I wanted more control over my data. 
-Public access is enabled for now, but user accounts and access restrictions will be added.”
+I built a simple yet functional workout tracking web application designed to help me monitor my gym progress over time. While there are countless commercial fitness and workout apps available, I wanted something that gave me complete control over my data, customization options, and the ability to tailor the experience to my specific training goals.
+
+The app allows users to log exercises, record sets, reps, and weights, and track performance trends over time. It provides a clean and minimalistic interface focused on usability rather than unnecessary features or ads. At the moment, public access is enabled so that others can explore the app’s features, but I’m currently working on implementing a user authentication system to support personalized accounts, secure data storage, and access restrictions for private tracking.
+
+For deployment, I used Railway, which provides an efficient, developer-friendly platform for continuous integration and easy scaling. Additionally, I’ve integrated OpenAI’s API to generate AI-powered workout suggestions — helping users discover new exercises, plan routines, and receive adaptive recommendations based on their logged history and goals.
+
+This project started as a personal tool but is gradually evolving into a more robust system with plans for data visualization dashboards, custom workout templates, and progress analytics. The goal is to make it a fully customizable, privacy-first fitness companion that grows smarter and more personalized with time.
