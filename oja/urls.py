@@ -21,7 +21,9 @@ from workout.views import (
     add_body_part,
     add_workout_session,
     add_body_part_exercise,
-    get_exercise_details
+    get_exercise_details,
+    BodyPartExerciseListTemplateView,
+    edit_workout_session
 )
 
 urlpatterns = [
@@ -31,7 +33,7 @@ urlpatterns = [
     path("body-parts/create/", add_body_part, name="create_body_part"),
 
     # BodyPartExercise
-    path("body-parts-exercises/create/", add_body_part_exercise, name="create_body_part_exercise"),  # ✅ correct view
+    path("body-parts-exercises/create/", add_body_part_exercise, name="create_body_part_exercise"),
 
     # Workout sessions
     path("workout-sessions/create/", add_workout_session, name="create_workout_session"),
@@ -40,8 +42,10 @@ urlpatterns = [
     path('', LandingPageView.as_view(), name='landing'),
 
     # API endpoint for exercise details
-    path('api/exercise/<id>/', get_exercise_details, name='exercise_details')
+    path('api/exercise/<id>/', get_exercise_details, name='exercise_details'),
+
+    path('body-parts-exercises/list/', BodyPartExerciseListTemplateView.as_view(), name='body_parts_exercises_list'),
+
+    path('workout-sessions/<int:pk>/edit/', edit_workout_session, name='edit_workout_session'),
+
 ]
-
-
-
