@@ -9,6 +9,16 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
+import dj_database_url
+import pymysql
+pymysql.install_as_MySQLdb()
+
+
+DEBUG = False
+
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if os.getenv("CSRF_TRUSTED_ORIGINS") else []
 
 
 AUTH_USER_MODEL = "workout.User"
@@ -25,10 +35,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&7fz59xlwm%llhz!ta@stx8h91_yr&j8lb2&gkmiu=e%&55wu2'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -78,11 +84,19 @@ WSGI_APPLICATION = 'oja.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    "default": dj_database_url.config(
+        env="DATABASE_URL",  # we'll set this on Railway
+        default=None,
+        conn_max_age=60,
+        ssl_require=False,   # set True only if your MySQL requires SSL
+    )
 }
+if DATABASES.get("default"):
+    DATABASES["default"]["ENGINE"] = "django.db.backends.mysql"
+    DATABASES["default"].setdefault("OPTIONS", {})
+    DATABASES["default"]["OPTIONS"].setdefault("init_command", "SET sql_mode='STRICT_TRANS_TABLES'")
+    DATABASES["default"]["OPTIONS"].setdefault("charset", "utf8mb4")
+
 
 
 # Password validation
