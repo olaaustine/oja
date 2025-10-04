@@ -41,3 +41,5 @@ typing-inspection==0.4.2
     # via pydantic
 tzdata==2025.2 ; sys_platform == 'win32'
     # via django
+gunicorn
+
