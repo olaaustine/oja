@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'oja.wsgi.application'
 
 DATABASES = {
     "default": dj_database_url.config(
-        env="DATABASE_URL",  # we'll set this on Railway
+        env="MYSQL_URL",  # we'll set this on Railway
         default=None,
         conn_max_age=60,
         ssl_require=False,   # set True only if your MySQL requires SSL
