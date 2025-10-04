@@ -5,6 +5,7 @@ from workout.serializers.workout_session import WorkoutSessionSerializer
 
 
 class ExerciseModel(BaseModel):
+    """ Pydantic model for Exercise"""
     name: str
     description: str
     sets: int
@@ -15,6 +16,7 @@ class ExerciseModel(BaseModel):
 
 
 def get_exercise_by_id(exercise_id: int) -> ExerciseModel | None:
+    """ Get an exercise by its ID and return it as an ExerciseModel """
     try:
         exercise = get_object_or_404(Exercise, id=exercise_id)
         return ExerciseModel.model_validate(exercise)
@@ -22,6 +24,7 @@ def get_exercise_by_id(exercise_id: int) -> ExerciseModel | None:
         return None
 
 def get_all_workout_sessions_by_id(exercise_id: int):
+    """ Get all workout sessions for a given BodyPartExercise ID """
     try:
         bodypart_exercise = get_object_or_404(BodyPartExercise, id=exercise_id)
         workout_sessions = bodypart_exercise.workoutsession_set.all()

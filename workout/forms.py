@@ -3,6 +3,7 @@ from .models import Exercise, BodyPart, BodyPartExercise, WorkoutSession
 
 
 class BodyPartForm(forms.ModelForm):
+    """Form for creating and editing BodyPart instances."""
     class Meta:
         model = BodyPart
         fields = ['name', 'description']
@@ -32,6 +33,7 @@ class BodyPartExerciseForm(forms.ModelForm):
         return body_part_exercise
 
 class WorkoutSessionForm(forms.ModelForm):
+    """Form for creating and editing WorkoutSession instances, including related Exercise fields."""
     # Add fields from Exercise for editing
     exercise_name = forms.CharField(max_length=100, label='Exercise Name')
     exercise_description = forms.CharField(widget=forms.Textarea, label='Exercise Description')

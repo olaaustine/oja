@@ -13,14 +13,17 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 
 class LandingPageView(TemplateView):
+    """View for the landing page."""
     template_name = "landing.html"
 
 class BodyPartExerciseListTemplateView(ListView):
+    """View to list all BodyPartExercise entries."""
     model = BodyPartExercise
     template_name = "body_part_exercise_list.html"
     context_object_name = "object_list"
 
 def get_exercise_details(request, id: int) -> JsonResponse:
+    "Get exercise details by BodyPartExercise ID"
     bodyparts_exercise = get_object_or_404(BodyPartExercise, id=id)
     exercise = get_object_or_404(Exercise, id=bodyparts_exercise.exercise.id)
 
@@ -34,6 +37,7 @@ def get_exercise_details(request, id: int) -> JsonResponse:
     return JsonResponse(data)
 
 class WorkoutSessionsCalculations(APIView):
+    """API view to get all workout sessions for a given exercise ID."""
     def get(self, request, exercise_id: int) -> Response:
         sessions = get_all_workout_sessions_by_id(exercise_id)
         if sessions is None:
@@ -42,6 +46,7 @@ class WorkoutSessionsCalculations(APIView):
             return Response({"sessions": sessions}, status=status.HTTP_200_OK)
 
 def add_body_part(request) -> HttpResponse:
+    """ View to add a new BodyPart """
     if request.method == 'POST':
         form = BodyPartForm(request.POST)
         if form.is_valid():
@@ -55,6 +60,7 @@ def add_body_part(request) -> HttpResponse:
 
 
 def add_body_part_exercise(request) -> HttpResponse:
+    """ View to add a new BodyPartExercise along with a new Exercise """
     if request.method == 'POST':
         form = BodyPartExerciseForm(request.POST)
         if form.is_valid():
@@ -69,6 +75,7 @@ def add_body_part_exercise(request) -> HttpResponse:
 
 
 def add_workout_session(request) -> HttpResponse:
+    """ View to add a new WorkoutSession along with editing related Exercise fields """
     if request.method == 'POST':
         form = WorkoutSessionForm(request.POST)
         if form.is_valid():
@@ -81,6 +88,7 @@ def add_workout_session(request) -> HttpResponse:
     return render(request, 'create_session.html', {'form': form})
 
 def edit_workout_session(request, id) -> HttpResponse:
+    """ View to edit an existing WorkoutSession along with related Exercise fields """
     summary_data = None
     try:
         bpe = BodyPartExercise.objects.get(id=id)
