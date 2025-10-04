@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
-# import dj_database_url
-# import pymysql
-#
-# pymysql.install_as_MySQLdb()
+import dj_database_url
+import pymysql
+
+pymysql.install_as_MySQLdb()
 
 
 DEBUG = True
