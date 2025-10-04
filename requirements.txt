@@ -45,3 +45,4 @@ gunicorn
 pymysql
 dj-database-url
 whitenoise
+openai
