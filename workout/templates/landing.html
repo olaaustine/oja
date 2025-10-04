@@ -89,12 +89,13 @@
         <h1>OJA</h1>
         <p>Track your strength, one rep at a time 💪</p>
 
+             <a href="{% url 'body_parts_exercises_list' %}" class="cta-btn" style="background:#636e72; color:#fff; margin-top:1em;">View All Body Part Exercises</a>
         <a href="{% url 'create_body_part' %}" class="cta-btn">Add a Body Part</a>
         <a href="{% url 'create_body_part_exercise' %}" class="cta-btn cta-btn-secondary">Add an Exercise</a>
         <a href="{% url 'create_workout_session' %}" class="cta-btn" style="margin-top: 1em;">Start a Workout Session</a>
+
 
         <footer>Stay consistent. Progress every day.</footer>
     </div>
 </body>
 </html>
-

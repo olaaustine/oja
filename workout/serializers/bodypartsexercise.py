@@ -11,18 +11,8 @@ class BodyPartsExerciseSerializer(serializers.ModelSerializer):
     body_part = BodyPartSerializer(read_only=True)
     exercise = ExerciseSerializer(read_only=True)
 
-    #write only primary key related fields
-    body_part_id = serializers.PrimaryKeyRelatedField(
-        source="body_part", queryset=BodyPart.objects.all(), write_only=True
-    )
-    exercise_id = serializers.PrimaryKeyRelatedField(
-        source="exercise", queryset=Exercise.objects.all(), write_only=True
-    )
-
-    def create(self, validated_data: dict) -> BodyPartExercise:
-        return BodyPartExercise.objects.create(**validated_data)
 
     class Meta:
         model = BodyPartExercise
-        fields = ['body_part', 'exercise', 'body_part_id', 'exercise_id']
+        fields = ['body_part', 'exercise']
 

@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Body Part Exercises • OJA</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #f8a5c2 0%, #fcd5ce 100%);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+        }
+        h2 {
+            text-align: center;
+            color: #e84393;
+            margin-bottom: 2rem;
+            font-weight: 800;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        th, td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f3e6e8;
+            text-align: left;
+        }
+        th {
+            background: #f8a5c2;
+            color: #fff;
+            font-weight: 700;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #e84393;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover {
+            color: #d63074;
+            text-decoration: underline;
+        }
+        .edit-button {
+            background: #0984e3;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>All Body Part Exercises</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Body Part</th>
+                    <th>Exercise Name</th>
+                    <th>Description</th>
+                    <th>Weights</th>
+                    <th>Sets</th>
+                    <th>Reps</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bpe in object_list %}
+                <tr>
+                    <td>{{ bpe.body_part.name }}</td>
+                    <td>{{ bpe.exercise.name }}</td>
+                    <td>{{ bpe.exercise.description }}</td>
+                    <td>{{ bpe.exercise.weights }}</td>
+                    <td>{{ bpe.exercise.sets }}</td>
+                    <td>{{ bpe.exercise.reps }}</td>
+                    <td>
+                        <a href="{% url 'create_workout_session' %}" class="Add new session">Add new session</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align:center; color:#999;">No body part exercises found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'landing' %}" class="back-link">&larr; Back to Landing Page</a>
+    </div>
+</body>
+</html>

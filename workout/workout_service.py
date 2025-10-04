@@ -8,7 +8,7 @@ class ExerciseModel(BaseModel):
     description: str
     sets: int
     reps: int
-    weight: int
+    weight: float
 
     model_config = ConfigDict(from_attributes=True)
 
