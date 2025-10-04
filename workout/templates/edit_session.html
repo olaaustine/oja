@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Workout Session • OJA</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #f8a5c2 0%, #fcd5ce 100%);
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            color: #333;
+        }
+        .form-container {
+            max-width: 520px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.10);
+        }
+        h2 {
+            text-align: center;
+            color: #e84393;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+        form {
+            margin-top: 1em;
+        }
+        label {
+            display: block;
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        input, select, textarea {
+            font-size: 1rem;
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #e7e7e9;
+            background: #fafafa;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #e84393;
+            background: #fff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(232, 67, 147, 0.12);
+        }
+        .success-message {
+            color: #2e7d32;
+            background: #eafaf1;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        .error-list {
+            color: #c0392b;
+            background: #fdecea;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 1rem;
+            list-style: none;
+        }
+        .error-list li {
+            margin: 6px 0;
+        }
+        button {
+            display: inline-block;
+            width: 100%;
+            background: #e84393;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-top: 1.25rem;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(232, 67, 147, 0.25);
+            transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+        }
+        button:hover {
+            background: #d63074;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(232, 67, 147, 0.28);
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #e84393;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover {
+            color: #d63074;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        {% if summary_data %}
+        <div class="form-container" style="background: #f8f9fa; border: 1px solid #e7e7e9; margin-bottom: 1.5rem; box-shadow: none;">
+            <h3 style="color: #e84393; text-align: center; margin-bottom: 1rem; font-weight: 700;">Workout Summary</h3>
+            {% if summary_data|length == 0 %}
+                <p style="text-align: center; color: #555;">No workout sessions found for this exercise yet.</p>
+            {% else %}
+                {% for session in summary_data %}
+                    <p style="text-align:center; color:#2e7d32; font-weight:600; margin-bottom:1rem;">
+                        Welldone girl, in {{ session.exercises.name }}, you are on an increase of {{ session.exercise_weights_increase_biweekly }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endif %}
+        <h2>Edit Workout Session</h2>
+        {% if success %}
+            <div class="success-message">Workout session updated successfully!</div>
+        {% endif %}
+        {% if errors %}
+            <ul class="error-list">
+                {% for field, error_list in errors.items %}
+                    {% for error in error_list %}
+                        <li>{{ field }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <label for="id_date">Date</label>
+            {{ form.date }}
+            <label for="id_body_part_exercise">Body Part &amp; Exercise</label>
+            {{ form.body_part_exercise }}
+            <label for="id_exercise_name">Exercise Name</label>
+            {{ form.exercise_name }}
+            <label for="id_exercise_description">Exercise Description</label>
+            {{ form.exercise_description }}
+            <label for="id_exercise_weights">Weights</label>
+            {{ form.exercise_weights }}
+            <label for="id_exercise_sets">Sets</label>
+            {{ form.exercise_sets }}
+            <label for="id_exercise_reps">Reps</label>
+            {{ form.exercise_reps }}
+            <button type="submit">Save Changes</button>
+        </form>
+        <a href="{% url 'body_parts_exercises_list' %}" class="back-link">&larr; Back to Body Part Exercises</a>
+        <a href="{% url 'landing' %}" class="back-link" style="margin-top:0.5em;">Back to Landing Page</a>
+    </div>
+</body>
+</html>
+

@@ -94,7 +94,7 @@
                     <td>{{ bpe.exercise.sets }}</td>
                     <td>{{ bpe.exercise.reps }}</td>
                     <td>
-                        <a href="{% url 'create_workout_session' %}" class="Add new session">Add new session</a>
+                        <a href="{% url 'edit_workout_session' bpe.id %}" class="Edit session">Edit session</a>
                     </td>
                 </tr>
                 {% empty %}

@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 # Create your models here.
 class Exercise(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(max_length=200)
+    description = models.TextField(max_length=200, null=True, blank=True)
     weights = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     sets = models.IntegerField(default=0)
     reps = models.IntegerField(default=0)
@@ -19,7 +19,7 @@ class Exercise(models.Model):
 
 class BodyPart(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
