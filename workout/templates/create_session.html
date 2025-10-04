@@ -124,6 +124,25 @@
             h2 { font-size: 1.6rem; }
             button { font-size: 1rem; }
         }
+
+        /* ⬅️ Back link */
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            text-align: center;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            background: #e1f5fe;
+            color: #01579b;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background .2s ease, transform .2s ease;
+        }
+        .back-link:hover {
+            background: #b3e5fc;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -171,6 +190,9 @@
 
             <button type="submit">Save Session</button>
         </form>
+
+        <a href="{% url 'landing' %}" class="back-link">&larr; Back to Landing Page</a>
+
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             var bpeSelect = document.getElementById('id_body_part_exercise');

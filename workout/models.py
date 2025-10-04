@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 class Exercise(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=200)
-    weights = models.IntegerField(default=0)
+    weights = models.DecimalField(default=0.00, max_digits=10, decimal_places=2)
     sets = models.IntegerField(default=0)
     reps = models.IntegerField(default=0)
 
