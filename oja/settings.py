@@ -83,19 +83,7 @@ WSGI_APPLICATION = 'oja.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": dj_database_url.config(
-        env="MYSQL_URL",  # we'll set this on Railway
-        default=None,
-        conn_max_age=60,
-        ssl_require=False,   # set True only if your MySQL requires SSL
-    )
-}
-if DATABASES.get("default"):
-    DATABASES["default"]["ENGINE"] = "django.db.backends.mysql"
-    DATABASES["default"].setdefault("OPTIONS", {})
-    DATABASES["default"]["OPTIONS"].setdefault("init_command", "SET sql_mode='STRICT_TRANS_TABLES'")
-    DATABASES["default"]["OPTIONS"].setdefault("charset", "utf8mb4")
+DATABASES = {"default": dj_database_url.parse(os.environ["MYSQL_URL"])}
 
 
 
