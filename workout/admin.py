@@ -7,5 +7,5 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Exercise)
 admin.site.register(BodyPart)
 admin.site.register(BodyPartExercise)
-admin.site.register(WorkoutSession)
+admin.site.register(WorkoutSession)s
 # Register your models here.
