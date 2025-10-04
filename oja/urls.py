@@ -1,6 +1,5 @@
 """
 URL configuration for oja project.
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
 Examples:
@@ -24,7 +23,8 @@ from workout.views import (
     get_exercise_details,
     BodyPartExerciseListTemplateView,
     edit_workout_session,
-    WorkoutSessionsCalculations
+    WorkoutSessionsCalculations,
+    get_suggestions_api_workout
 )
 
 urlpatterns = [
@@ -50,4 +50,6 @@ urlpatterns = [
     path('workout-sessions/<id>/edit/', edit_workout_session, name='edit_workout_session'),
 
     path('api/workout-sessions-calc/<int:exercise_id>/', WorkoutSessionsCalculations.as_view(), name='workout_sessions_calculations'),
+
+    path('/api/suggestions/', get_suggestions_api_workout, name='suggest_workout_api')
 ]
