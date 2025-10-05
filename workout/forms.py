@@ -1,7 +1,6 @@
 from django import forms
 from .models import Exercise, BodyPart, BodyPartExercise, WorkoutSession
-from workout.workout_service import get_exercise_by_name
-from django.core.exceptions import ValidationError
+from workout.workout_service import get_exercise_by_name_and_body_part
 
 
 class BodyPartForm(forms.ModelForm):
@@ -29,7 +28,7 @@ class BodyPartExerciseForm(forms.ModelForm):
         exercise_name = cleaned.get('exercise_name')
         body_part = cleaned.get('body_part')
 
-        existing_exercise =get_exercise_by_name(body_part, exercise_name)
+        existing_exercise =get_exercise_by_name_and_body_part(body_part, exercise_name)
         if existing_exercise:
             self.add_error('exercise_name', f'{exercise_name} already exists for {body_part}.')
 

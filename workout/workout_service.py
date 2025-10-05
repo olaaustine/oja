@@ -20,7 +20,7 @@ class ExistingExerciseError(BaseModel):
     """ Pydantic model for ExistingExerciseError """
     detail: str
 
-def get_exercise_by_name(body: str, name: str) -> ExerciseModel | None:
+def get_exercise_by_name_and_body_part(body: str, name: str) -> ExerciseModel | None:
     """Get an exercise by its name and return it as an ExerciseModel."""
     try:
         exercise = BodyPartExercise.objects.get(
