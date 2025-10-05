@@ -156,6 +156,25 @@
         </form>
         <a href="{% url 'body_parts_exercises_list' %}" class="back-link">&larr; Back to Body Part Exercises</a>
         <a href="{% url 'landing' %}" class="back-link" style="margin-top:0.5em;">Back to Landing Page</a>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var bpeSelect = document.getElementById('id_body_part_exercise');
+                if (bpeSelect) {
+                    bpeSelect.addEventListener('change', function() {
+                        var bpeId = this.value;
+                        fetch('/api/exercise/' + bpeId + '/')
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('id_exercise_name').value = data.name;
+                                document.getElementById('id_exercise_description').value = data.description;
+                                document.getElementById('id_exercise_weights').value = data.weights;
+                                document.getElementById('id_exercise_sets').value = data.sets;
+                                document.getElementById('id_exercise_reps').value = data.reps;
+                            });
+                    });
+                }
+            });
+        </script>
     </div>
 </body>
 </html>

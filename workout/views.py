@@ -5,9 +5,9 @@ from django.views.generic import TemplateView, ListView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from workout.models import Exercise, BodyPartExercise
+from workout.models import Exercise, BodyPartExercise, WorkoutSession
 from workout.forms import BodyPartForm, WorkoutSessionForm, BodyPartExerciseForm
-from workout.workout_service import ExerciseModel, get_all_workout_sessions_by_id, get_suggestions_for_exercise
+from workout.workout_service import ( ExerciseModel, get_all_workout_sessions_by_id, get_suggestions_for_exercise)
 from workout.serializers.bodypartsexercise import BodyPartsExerciseSerializer
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
@@ -65,6 +65,7 @@ def add_body_part_exercise(request) -> HttpResponse:
     if request.method == 'POST':
         form = BodyPartExerciseForm(request.POST)
         if form.is_valid():
+            #check if exercise with same name exists
             bodypart_exercise = form.save()
             # Get workout suggestion for the selected body part
             body_part_name = bodypart_exercise.body_part.name
@@ -96,14 +97,14 @@ def edit_workout_session(request, id) -> HttpResponse:
     try:
         bpe = BodyPartExercise.objects.get(id=id)
     except BodyPartExercise.DoesNotExist:
-        return render(request, 'edit_session.html', {'form': None, 'errors': 'BodyPartExercise not found', 'summary_data': None})
+        return render(request, 'edit_session.html', {'form': None, 'errors': 'BodyPartExercise not found', 'summary_data': None, 'workout_session': None})
 
     if request.method == 'POST':
         form = WorkoutSessionForm(request.POST)
         if form.is_valid():
             workout_session = form.save()
             summary_data = get_all_workout_sessions_by_id(bpe.exercise.id)
-            return render(request, 'edit_session.html', {'form': form, 'success': True, 'summary_data': summary_data})
+            return render(request, 'edit_session.html', {'form': form, 'success': True, 'summary_data': summary_data, 'workout_session': workout_session})
         else:
             if id:
                 try:
@@ -111,11 +112,12 @@ def edit_workout_session(request, id) -> HttpResponse:
                     summary_data = get_all_workout_sessions_by_id(bpe.exercise.id)
                 except BodyPartExercise.DoesNotExist:
                     summary_data = None
-            return render(request, 'edit_session.html', {'form': form, 'errors': form.errors, 'summary_data': summary_data})
+            return render(request, 'edit_session.html', {'form': form, 'errors': form.errors, 'summary_data': summary_data, 'workout_session': None})
     else:
         form = WorkoutSessionForm()
         summary_data = get_all_workout_sessions_by_id(bpe.exercise.id)
-        return render(request, 'edit_session.html', {'form': form, 'summary_data': summary_data})
+        workout_session = WorkoutSession.objects.filter(body_part_exercise=bpe).order_by('-date').first()
+        return render(request, 'edit_session.html', {'form': form, 'summary_data': summary_data, 'workout_session': workout_session})
 
 def get_suggestions_api_workout(request):
     if request.method == 'POST':

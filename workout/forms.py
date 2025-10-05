@@ -1,9 +1,13 @@
 from django import forms
 from .models import Exercise, BodyPart, BodyPartExercise, WorkoutSession
+from workout.workout_service import get_exercise_by_name
+from django.core.exceptions import ValidationError
 
 
 class BodyPartForm(forms.ModelForm):
     """Form for creating and editing BodyPart instances."""
+    description = forms.CharField(widget=forms.Textarea, required=False)
+
     class Meta:
         model = BodyPart
         fields = ['name', 'description']
@@ -11,7 +15,7 @@ class BodyPartForm(forms.ModelForm):
 class BodyPartExerciseForm(forms.ModelForm):
     # Add fields for creating a new Exercise
     exercise_name = forms.CharField(max_length=100, label='Exercise Name')
-    exercise_description = forms.CharField(widget=forms.Textarea, label='Exercise Description')
+    exercise_description = forms.CharField(widget=forms.Textarea, label='Exercise Description', required=False)
 
     class Meta:
         model = BodyPartExercise
@@ -19,6 +23,17 @@ class BodyPartExerciseForm(forms.ModelForm):
         widgets = {
             'body_part': forms.Select(attrs={'class': 'form-select'}),
         }
+
+    def clean(self):
+        cleaned = super().clean()
+        exercise_name = cleaned.get('exercise_name')
+        body_part = cleaned.get('body_part')
+
+        existing_exercise =get_exercise_by_name(body_part, exercise_name)
+        if existing_exercise:
+            self.add_error('exercise_name', f'{exercise_name} already exists for {body_part}.')
+
+        return cleaned
 
     def save(self, commit=True):
         body_part_exercise = super().save(commit=False)

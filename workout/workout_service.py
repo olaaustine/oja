@@ -16,6 +16,20 @@ class ExerciseModel(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class ExistingExerciseError(BaseModel):
+    """ Pydantic model for ExistingExerciseError """
+    detail: str
+
+def get_exercise_by_name(body: str, name: str) -> ExerciseModel | None:
+    """Get an exercise by its name and return it as an ExerciseModel."""
+    try:
+        exercise = BodyPartExercise.objects.get(
+            body_part__name=body,
+            exercise__name=name
+        )
+        return exercise
+    except BodyPartExercise.DoesNotExist:
+        return None
 
 def get_exercise_by_id(exercise_id: int) -> ExerciseModel | None:
     """ Get an exercise by its ID and return it as an ExerciseModel """
@@ -37,8 +51,9 @@ def get_all_workout_sessions_by_id(exercise_id: int):
 
 def get_suggestions_for_exercise(body_part: str):
     """Get exercise suggestions based on body part"""
+
     client = OpenAI(api_key=settings.WORKOUT_OPENAI)
-    response = client.chat.completions.create(
+    response = client.chat.completions.creatse(
         model="gpt-3.5-turbo",
         messages=[
             {
@@ -47,7 +62,7 @@ def get_suggestions_for_exercise(body_part: str):
             },
             {
                 "role": "user",
-                "content": f"Suggest 3 exercises for the {body_part}."
+                "content": f"Suggest 5 exercises for the {body_part}."
             }
         ],
         max_tokens=150,
