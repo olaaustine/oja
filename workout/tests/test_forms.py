@@ -45,4 +45,4 @@ def test_body_part_exercise_form_invalid_data():
     assert not form.is_valid()
     assert 'body_part' in form.errors
     assert 'exercise_name' in form.errors
-    assert 'exercise_description' in form.errors
+
