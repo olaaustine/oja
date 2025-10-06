@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'oja.wsgi.application'
 #     }
 # }
 
-MYSQL_URL = os.environ["MYSQL_URL"])
+MYSQL_URL = os.environ.get("MYSQL_URL")
 if MYSQL_URL:
     DATABASES = {
         "default": dj_database_url.parse(MYSQL_URL)
