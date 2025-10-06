@@ -1,10 +1,8 @@
-from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from workout.models import Exercise, BodyPartExercise, WorkoutSession
 from workout.forms import BodyPartForm, WorkoutSessionForm, BodyPartExerciseForm
 from workout.workout_service import ( get_all_workout_sessions_by_id, get_suggestions_for_exercise)
@@ -40,14 +38,15 @@ def get_exercise_details(request, id: int) -> JsonResponse:
     }
     return JsonResponse(data)
 
-class WorkoutSessionsCalculations(APIView):
-    """API view to get all workout sessions for a given exercise ID."""
-    def get(self, request, exercise_id: int) -> Response:
-        sessions = get_all_workout_sessions_by_id(exercise_id)
-        if sessions is None:
-            return Response({"error": "Exercise not found"}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            return Response({"sessions": sessions}, status=status.HTTP_200_OK)
+
+"""API view to get all workout sessions for a given exercise ID."""
+@api_view(['GET'])
+def get_exercise(exercise_id: int) -> Response:
+    sessions = get_all_workout_sessions_by_id(exercise_id)
+    if sessions is None:
+        return Response({"error": "Exercise not found"}, status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response({"sessions": sessions}, status=status.HTTP_200_OK)
 
 def add_body_part(request) -> HttpResponse:
     """ View to add a new BodyPart """
