@@ -53,7 +53,7 @@ def get_suggestions_for_exercise(body_part: str):
     """Get exercise suggestions based on body part"""
 
     client = OpenAI(api_key=settings.WORKOUT_OPENAI)
-    response = client.chat.completions.creatse(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {

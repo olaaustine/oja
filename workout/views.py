@@ -7,8 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from workout.models import Exercise, BodyPartExercise, WorkoutSession
 from workout.forms import BodyPartForm, WorkoutSessionForm, BodyPartExerciseForm
-from workout.workout_service import ( ExerciseModel, get_all_workout_sessions_by_id, get_suggestions_for_exercise)
-from workout.serializers.bodypartsexercise import BodyPartsExerciseSerializer
+from workout.workout_service import ( get_all_workout_sessions_by_id, get_suggestions_for_exercise)
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.http import HttpResponse
@@ -22,6 +21,10 @@ class BodyPartExerciseListTemplateView(ListView):
     model = BodyPartExercise
     template_name = "body_part_exercise_list.html"
     context_object_name = "object_list"
+    paginate_by = 5
+
+    def get_queryset(self):
+        return BodyPartExercise.objects.select_related('exercise', 'body_part').order_by('exercise__name')
 
 def get_exercise_details(request, id: int) -> JsonResponse:
     "Get exercise details by BodyPartExercise ID"

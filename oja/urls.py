@@ -51,5 +51,5 @@ urlpatterns = [
 
     path('api/workout-sessions-calc/<int:exercise_id>/', WorkoutSessionsCalculations.as_view(), name='workout_sessions_calculations'),
 
-    path('/api/suggestions/', get_suggestions_api_workout, name='suggest_workout_api')
+    path('api/suggestions/', get_suggestions_api_workout, name='suggest_workout_api')
 ]
