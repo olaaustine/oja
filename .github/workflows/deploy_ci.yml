@@ -43,28 +43,3 @@ jobs:
         run: |
            pytest  workout/tests
 
-  deploy:
-    name: Deploy to Railway (only after tests pass on main)
-    needs: tests
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    # Use Railway’s CLI container so we don’t have to install anything
-    container: ghcr.io/railwayapp/cli:latest
-    env:
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Login to Railway
-        run: railway login
-        
-      - name: Link to project
-        run: railway link -p ${{ secrets.RAILWAY_PROJECT }}
-
-      - name: Select service
-        run: railway service ${{ secrets.RAILWAY_SERVICE_ID }}
-
-      - name: Deploy
-        run: railway up
-
