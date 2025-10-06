@@ -57,6 +57,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Railway login
+        run: |
+           railway login --token $RAILWAY_TOKEN
+
       # Trigger a deploy to the specific service in your Railway project
       - name: Deploy
         run: |
