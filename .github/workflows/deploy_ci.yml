@@ -55,5 +55,12 @@ jobs:
       RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
     steps:
       - uses: actions/checkout@v3
-      - run: railway up --project=${{ secrets.RAILWAY_PROJECT }} --service=${{ secrets.RAILWAY_SERVICE_ID }}
+      - name: Link to project
+        run: railway link "$RAILWAY_PROJECT_ID"
+
+      - name: Select service
+        run: railway use "$RAILWAY_SERVICE_ID"
+
+      - name: Deploy
+        run: railway up
 
