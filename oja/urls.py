@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from workout.views import (
     LandingPageView,
     add_body_part,
@@ -24,10 +24,13 @@ from workout.views import (
     BodyPartExerciseListTemplateView,
     edit_workout_session,
     get_exercise,
-    get_suggestions_api_workout
+    get_suggestions_api_workout,
+    SignUpView
 )
 
 urlpatterns = [
+
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('admin/', admin.site.urls),
 
     # Body parts
@@ -51,5 +54,9 @@ urlpatterns = [
 
     path('api/workout-sessions-calc/<int:exercise_id>/', get_exercise, name='workout_sessions_calculations'),
 
-    path('api/suggestions/', get_suggestions_api_workout, name='suggest_workout_api')
+    path('api/suggestions/', get_suggestions_api_workout, name='suggest_workout_api'),
+
+    path("accounts/", include("django.contrib.auth.urls")),
+
+    path("signup/", SignUpView.as_view(), name="signup"),
 ]
