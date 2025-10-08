@@ -1,19 +1,13 @@
 from rest_framework import serializers
-from workout.models import BodyPart, Exercise
-from typing import Optional
-from workout.serializers.bodyparts import BodyPartSerializer
-from workout.serializers.exercise import ExerciseSerializer
-from workout.models import BodyPartExercise, BodyPart, Exercise
+from workout.models import BodyPartExercise
 
 
 class BodyPartsExerciseSerializer(serializers.ModelSerializer):
-    # read only nested serializers
-    # this will return the full body part and exercise details but it can not be used to create or update
-    body_part = BodyPartSerializer(read_only=True)
-    exercise = ExerciseSerializer(read_only=True)
-
+    # read only nested serializers - will cause an N + 1 query problem
+    # so instead using a PrimaryKeyRelatedField that will return only the IDs
+    body_part = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    exercise = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = BodyPartExercise
-        fields = ['body_part', 'exercise']
-
+        fields = ["body_part", "exercise"]
