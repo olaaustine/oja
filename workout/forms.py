@@ -76,9 +76,11 @@ class WorkoutSessionForm(forms.ModelForm):
             "exercise_weights",
             "exercise_sets",
             "exercise_reps",
+            "user",
         ]
         widgets = {
             "body_part_exercise": forms.Select(attrs={"class": "form-select"}),
+            "user": forms.Select(attrs={"class": "form-select"}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -110,9 +112,9 @@ class WorkoutSessionForm(forms.ModelForm):
         # Update the exercise linked to the selected BodyPartExercise
         body_part_exercise = workout_session.body_part_exercise
         exercise = body_part_exercise.exercise
-        exercise.weights = self.cleaned_data["exercise_weights"]
-        exercise.sets = self.cleaned_data["exercise_sets"]
-        exercise.reps = self.cleaned_data["exercise_reps"]
+        exercise.weights = self.cleaned_data.get("exercise_weights", 0)
+        exercise.sets = self.cleaned_data.get("exercise_sets", 0)
+        exercise.reps = self.cleaned_data.get("exercise_reps", 0)
         exercise.save()
         if commit:
             workout_session.save()

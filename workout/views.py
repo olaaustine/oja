@@ -19,6 +19,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from django.conf import settings
 
 
 class LandingPageView(TemplateView):
@@ -100,7 +101,11 @@ def add_body_part_exercise(request) -> HttpResponse:
             bodypart_exercise = form.save()
             # Get workout suggestion for the selected body part
             body_part_name = bodypart_exercise.body_part.name
-            suggestion = get_suggestions_for_exercise(body_part_name)
+            suggestion = (
+                get_suggestions_for_exercise(body_part_name)
+                if settings.WORKOUT_OPENAI
+                else None
+            )
             return render(
                 request,
                 "create_body_part_exercise.html",
@@ -208,12 +213,14 @@ def edit_workout_session(request, id) -> HttpResponse:
         )
 
 
+api_view(["POST"])
+
+
 def get_suggestions_api_workout(request):
-    if request.method == "POST":
-        body_part = request.POST.get("body_part", "")
-        if body_part:
-            suggestion = get_suggestions_for_exercise(body_part)
-            return JsonResponse({"suggestion": suggestion})
-        else:
-            return JsonResponse({"error": "Body part is required"}, status=400)
-    return JsonResponse({"error": "Invalid request method"}, status=405)
+    """API endpoint to get workout suggestions based on body part"""
+    body_part = request.POST.get("body_part", "")
+    if body_part:
+        suggestion = get_suggestions_for_exercise(body_part)
+        return JsonResponse({"suggestion": suggestion})
+    else:
+        return JsonResponse({"error": "Body part is required"}, status=400)
